@@ -1,35 +1,40 @@
 package dev.poncio.SystemApps.InstantNotificationSdk.job;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import dev.poncio.SystemApps.InstantNotificationSdk.dto.ResponseEntity;
-import dev.poncio.SystemApps.InstantNotificationSdk.services.HttpService;
-import dev.poncio.SystemApps.InstantNotificationSdk.services.HttpService.MetodoRequisicao;
+import dev.poncio.SystemApps.InstantNotificationSdk.utils.HttpUtils;
+import dev.poncio.SystemApps.InstantNotificationSdk.utils.HttpUtils.MetodoRequisicao;
 
+@Configurable
 public class INCWatcher {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private boolean connectionSuccess = false;
     private INCThreadUpdater threadUpdater;
 
-    @Autowired
-    private HttpService httpService;
-
     private INCBroker brokerConfiguration;
 
     protected INCWatcher(INCBroker brokerConfiguration) {
         this.brokerConfiguration = brokerConfiguration;
+
         this.threadUpdater = new INCThreadUpdater(brokerConfiguration);
         this.threadUpdater.start();
     }
 
+    public void stopThreadUpdater() {
+        this.threadUpdater.stopAsyncThread();
+    }
+
     protected boolean makeTestConnection() {
         try {
-            ResponseEntity result = this.httpService.makeReq(MetodoRequisicao.POST,
+            ResponseEntity result = HttpUtils.get().makeReq(MetodoRequisicao.POST,
                     this.brokerConfiguration.getUrl() + "/sdk/test", null, null, null);
             this.connectionSuccess = result != null && result.getStatus() != null && result.getStatus().booleanValue();
             return this.connectionSuccess;
@@ -46,11 +51,11 @@ public class INCWatcher {
     public INCJob createNewJob(String name, String description) throws Exception {
         try {
             INCJob job = new INCJob(null, name, description);
-            ResponseEntity resultCreateJob = this.httpService.makeReq(MetodoRequisicao.POST,
-                    this.brokerConfiguration + "/job/create", job, null, null);
+            ResponseEntity resultCreateJob = HttpUtils.get().makeReq(MetodoRequisicao.POST,
+                    this.brokerConfiguration.getUrl() + "/job/create", job, null, doAuthMap(brokerConfiguration));
             if (resultCreateJob != null && resultCreateJob.getStatus() != null
                     && resultCreateJob.getStatus().booleanValue()) {
-                return (INCJob) resultCreateJob.getAttach();
+                return resultCreateJob.castObject(INCJob.class);
             } else
                 throw new Exception("Was not possible to create the job!");
         } catch (Exception e) {
@@ -71,15 +76,17 @@ public class INCWatcher {
         }
     }
 
-    public INCJob finalizeJob(INCJob job) throws Exception {
+    public INCJob finalizeJob(INCJob job, boolean success, String resultMessage) throws Exception {
         try {
             if (job == null || job.getId() == null)
                 throw new Exception("Job provided is not a synchronized job");
-            ResponseEntity resultCreateJob = this.httpService.makeReq(MetodoRequisicao.POST,
-                    this.brokerConfiguration + "/job/finalize/" + job.getId(), null, null, null);
+            ResponseEntity resultCreateJob = HttpUtils.get().makeReq(MetodoRequisicao.POST,
+                    this.brokerConfiguration.getUrl() + "/job/finalize/" + job.getId(),
+                    INCJobFinalize.builder().success(success).resultMessage(resultMessage).build(), null,
+                    doAuthMap(brokerConfiguration));
             if (resultCreateJob != null && resultCreateJob.getStatus() != null
                     && resultCreateJob.getStatus().booleanValue()) {
-                return (INCJob) resultCreateJob.getAttach();
+                return resultCreateJob.castObject(INCJob.class);
             } else
                 throw new Exception("Was not possible to finalize the job!");
         } catch (Exception e) {
@@ -101,6 +108,14 @@ public class INCWatcher {
 
     public static <T> String calcPercentStr(Integer idx, Integer size) {
         return String.format("%.2f%%", calcPercent(idx, size));
+    }
+
+    protected static Map<String, String> doAuthMap(INCBroker brokerConfiguration) {
+        return new HashMap<String, String>() {
+            {
+                put("SDK-Auth", brokerConfiguration.getToken());
+            }
+        };
     }
 
 }

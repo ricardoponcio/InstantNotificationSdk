@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-InstantNotificationSdkApplication<InstantNotificationSdk>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "dev.poncio.SystemApps.InstantNotificationSdk.InstantNotificationSdkApplication",
+            "projectName": "InstantNotificationSdk",
+            "args": ""
+        }
+    ]
+}

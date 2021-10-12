@@ -4,16 +4,17 @@ import java.io.Serializable;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class INCJob implements Serializable {
+public class INCJobFinalize implements Serializable {
     
-    private Long id;
-    private String name;
-    private String description;
+    private boolean success;
+    private String resultMessage;
 
 }

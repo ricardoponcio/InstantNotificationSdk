@@ -1,0 +1,11 @@
+/home/ricardo.poncio/Documents/Projetos/InstantNotificationSdk/src/main/java/dev/poncio/SystemApps/InstantNotificationSdk/dto/ResponseEntity.java
+/home/ricardo.poncio/Documents/Projetos/InstantNotificationSdk/src/main/java/dev/poncio/SystemApps/InstantNotificationSdk/InstantNotificationSdkApplication.java
+/home/ricardo.poncio/Documents/Projetos/InstantNotificationSdk/src/main/java/dev/poncio/SystemApps/InstantNotificationSdk/job/INCThreadUpdater.java
+/home/ricardo.poncio/Documents/Projetos/InstantNotificationSdk/src/main/java/dev/poncio/SystemApps/InstantNotificationSdk/job/INCWatcher.java
+/home/ricardo.poncio/Documents/Projetos/InstantNotificationSdk/src/main/java/dev/poncio/SystemApps/InstantNotificationSdk/utils/HttpUtils.java
+/home/ricardo.poncio/Documents/Projetos/InstantNotificationSdk/src/main/java/dev/poncio/SystemApps/InstantNotificationSdk/job/INCConnector.java
+/home/ricardo.poncio/Documents/Projetos/InstantNotificationSdk/src/main/java/dev/poncio/SystemApps/InstantNotificationSdk/job/INCBroker.java
+/home/ricardo.poncio/Documents/Projetos/InstantNotificationSdk/src/main/java/dev/poncio/SystemApps/InstantNotificationSdk/job/INCJobFinalize.java
+/home/ricardo.poncio/Documents/Projetos/InstantNotificationSdk/src/main/java/dev/poncio/SystemApps/InstantNotificationSdk/job/INCJobUpdate.java
+/home/ricardo.poncio/Documents/Projetos/InstantNotificationSdk/src/main/java/dev/poncio/SystemApps/InstantNotificationSdk/utils/ParameterStringBuilder.java
+/home/ricardo.poncio/Documents/Projetos/InstantNotificationSdk/src/main/java/dev/poncio/SystemApps/InstantNotificationSdk/job/INCJob.java
